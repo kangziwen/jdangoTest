@@ -1,0 +1,46 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/login/" method="post">
+        {% csrf_token %}
+        <input type="text" name="user"/>
+        <input type="text" name="pwd"/>
+        <input type="checkbox" name="rmb" value="1"/>
+        <input type="submit" value="提交" />
+
+        <input type="button" id="btn" value="按钮"/>
+{#        <img src="/static/images/1234.jpg"/>#}
+    </form>
+    <script src="/static/js/jquery-1.12.4.js"></script>
+    <script src="/static/js/jquery.cookie.js"></script>
+
+    <script>
+        $(function () {
+        $.ajaxSetup({
+                beforeSend: function(xhr,settings){
+                    xhr.setRequestHeader('X-CSRFtoken', $.cookie('csrftoken'));
+                }
+            });
+
+            $('#btn').click(function () {
+                $.ajax({
+                    url: '/login/',
+                    type: "POST",
+                    data: {'user': 'root', 'pwd': '123'},
+                    // headers: {'X-CSRFtoken': $.cookie('csrftoken')},
+                    success: function (arg) {
+                        console.log('success.............')
+                    }
+                })
+            })
+
+        })
+    </script>
+
+</body>
+</html>
