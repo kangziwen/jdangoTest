@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>upload</title>
+    <style>
+        .upload{
+{#            display: inline-block;#}
+            padding: 10px;
+            position: absolute;
+            top:0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            z-index: 90;
+            text-align: center;
+            color: darkgray;
+            background-color: azure;
+        }
+        .file{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            opacity: 0;
+            z-index: 100;
+        }
+        .sub{
+            width: 80px;
+            height: 30px;
+            margin: 5px;
+            background-color: antiquewhite;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="position: relative;width: 100px;height: 50px;background-color: antiquewhite">
+        <input class="file" type="file" id="fafafa" name="fafafa"/>
+        <a class="upload" >上传</a>
+    </div>
+    <input type="button" value="xhr提交" onclick="xhrSubmit();" class="sub">
+    <input type="button" value="jquery提交" onclick="jqSubmit();" class="sub">
+    <br/>
+
+
+    <form id="form1" action="/user/upload_file/" method="POST"
+    enctype="multipart/form-data" target="ifm1"
+    >
+        <iframe id="ifm1" name="ifm1" style="display: none;"></iframe>
+{#        <input type="file" name="fafafa" >#}
+{#        <input type="submit" onclick="iframeSubmit();" value="form提交代码"#}
+{#        class="sub"#}
+        <input type="file" name="fafafa" onchange="changeUpload();">
+    </form>
+
+    <div id="preview"></div>
+
+<script src="/static/js/jquery-1.12.4.js"></script>
+
+<script>
+    function xhrSubmit() {
+        var file_obj = document.getElementById('fafafa').files[0];
+        var fd = new FormData();
+        fd.append('username','root')
+        fd.append('fafafa',file_obj)
+
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST','/user/upload_file/',true)
+
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState ==4){
+                var obj = JSON.parse(xhr.responseText)
+            }
+        }
+        xhr.send(fd);
+    }
+
+    function jqSubmit() {
+        var file_obj = document.getElementById('fafafa').files[0]
+
+        var fd = new FormData()
+        fd.append('username','root')
+        fd.append('fafafa',file_obj)
+
+        $.ajax({
+            url:'/user/upload_file/',
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success:function (arg,a1,a2) {
+                console.log('arg:',arg)
+                console.log('a1:',a1)
+                console.log('a2:',a2)
+
+
+            }
+        })
+    }
+    function iframeSubmit() {
+       $('#ifm1').load(function () {
+           var text = $('#ifm1').contents().find('body').text();
+           var obj = JSON.parse(text)
+           $('#preview').empty()
+           var imgTag = document.createElement('img')
+           imgTag.src = '/'+obj.data;
+           $('#preview').append(imgTag)
+       })
+    }
+    function changeUpload() {
+        console.log('changeUpload....')
+      $('#ifm1').load(function () {
+{#          var text = $('#ifm1').contents().find('body').text();#}
+          var text = $('#ifm1').contents().find('body').text();
+
+          var obj = JSON.parse(text)
+        console.log(text)
+
+          $('#preview').empty()
+          var imgTag = document.createElement('img')
+          
+          imgTag.src = '/'+obj.data
+          $('#preview').append(imgTag);
+
+      })
+      $('#form1').submit();
+
+    }
+</script>
+</body>
+</html>
