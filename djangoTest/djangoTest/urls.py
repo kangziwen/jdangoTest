@@ -25,7 +25,9 @@ urlpatterns = [
     url(r'^login',views1.login),
     url(r'^index', views1.index),
     url(r'^logout', views1.logout),
-    url(r'^user/',include('app02.urls'))
+    url(r'^user/', include('app02.urls')),
+    url(r'^model/', include('app_name.urls')),
+
 ]
 #设置静态文件路径
 urlpatterns += staticfiles_urlpatterns()

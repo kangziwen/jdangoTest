@@ -28,7 +28,6 @@ def index(request):
     else:
         return HttpResponse('gunduzi')
 
-
 def logout(request):
     request.session.clear()
     return redirect('/login')
