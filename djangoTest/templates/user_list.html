@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <ul>
+        {% for foo in li %}
+            <li>{{ foo.username }}-{{ foo.user_type.caption }}-<a href="/model/edit-{{ foo.id }}">编辑</a>></li>
+        {% endfor %}
+
+    </ul>
+</body>
+</html>

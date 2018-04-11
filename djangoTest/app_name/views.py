@@ -59,6 +59,25 @@ class UserInfoForm(forms.Form):
     def __init__(self,*args,**kwargs):
         super(UserInfoForm,self).__init__(*args,**kwargs)
         # self.fields['user_type'].choices = models.UserType.objects.values_list('id','caption')
+
+def user_list(request):
+    li = models.UserInfo.objects.all().select_related('user_type')
+    return render(request,'user_list.html',{'li': li})
+
+def user_edit(request, nid):
+    if request.method == 'GET':
+        user_obj = models.UserInfo.objects.filter(id=nid).first()
+        mf = UserInfoModelForm(instance=user_obj)
+        return render(request, 'user_edit.html', {'mf': mf, 'nid': nid})
+    elif request.method == 'POST':
+        user_obj = models.UserInfo.objects.filter(id=nid).first()
+        mf = UserInfoModelForm(request.POST, instance=user_obj)
+        if mf.is_valid():
+            mf.save()
+        else:
+            print(mf.errors.as_json())
+        return render(request, 'user_edit.html', {'mf': mf, 'nid': nid})
+
 def indexMF(request):
     if request.method == 'GET':
         obj = UserInfoModelForm()
