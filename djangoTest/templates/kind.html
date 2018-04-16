@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/model/kindpost/" method="post">
+    {% csrf_token %}
+    <div style="margin: 5px">
+        <textarea id="content"></textarea>
+    </div>
+    <input type="submit" value="提交"/>
+</form>
+<script src="/static/js/jquery-1.12.4.js"></script>
+<script src="/static/kindeditor-4.1.10/kindeditor-all.js"></script>
+<script>
+    $(function () {
+        KindEditor.create('#content',{
+            uploadJson: '/model/upload_img/',
+            allowImageRemote: false,
+            allowImageUpload: false,
+            extraFileUploadParams: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }
+        });
+    })
+</script>
+</body>
+</html>

@@ -24,3 +24,8 @@ def upload_file(request):
     import json
     return HttpResponse(json.dumps(ret))
 
+
+# model 相关代码
+
+
+

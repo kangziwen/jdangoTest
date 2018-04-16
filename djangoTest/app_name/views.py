@@ -113,3 +113,38 @@ def index(request):
         return render(request,'modelForm.html',{'obj':obj})
 
 
+def kind(request):
+    return render(request,'kind.html')
+
+def kindpost(request):
+
+    if request.method =='POST':
+        print(request.POST)
+    return render(request,'kind.html')
+
+
+def upload_img(request):
+    # 上传的类型 ['image'] 图片
+    itype = request.GET.get('dir')
+    print('files: ', request.FILES)
+    print('itype: ', itype)
+
+    if itype == 'image':
+        img = request.FILES.get('imgFile')
+        import os
+        img_path = os.path.join('static/images/', img.name)
+        with open(img_path, 'wb') as f:
+            for item in img.chunks():
+                f.write(item)
+
+            import json
+            dic = {
+                'error': 0,
+                # 'url': '/static/images/WechatIMG129.jpeg',
+                'url': img_path,
+                'message': 'mei you cuowu'
+            }
+
+            return HttpResponse(json.dumps(dic))
+    return HttpResponse('ok')
+
